@@ -1,5 +1,6 @@
 ﻿using System;
 using MySql.Data.MySqlClient;
+using System.Collections.Generic;
 
 namespace datalay
 {
@@ -31,6 +32,52 @@ namespace datalay
                 }
             }
         }
+
+        // Method to fetch game history
+        public List<GameHistory> GetGameHistory()
+        {
+            List<GameHistory> gameHistoryList = new List<GameHistory>();
+
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                try
+                {
+                    conn.Open();
+                    string query = "SELECT PlayerName, GuessedNumber, Attempts, GameDate FROM GameHistory";
+                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                    {
+                        using (MySqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                GameHistory history = new GameHistory
+                                {
+                                    PlayerName = reader.GetString("PlayerName"),
+                                    GuessedNumber = reader.GetInt32("GuessedNumber"),
+                                    Attempts = reader.GetInt32("Attempts"),
+                                    GameDate = reader.GetDateTime("GameDate")
+                                };
+                                gameHistoryList.Add(history);
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Error fetching game history: " + ex.Message);
+                }
+            }
+
+            return gameHistoryList;
+        }
     }
 
+    // Class representing the GameHistory data model
+    public class GameHistory
+    {
+        public string PlayerName { get; set; }
+        public int GuessedNumber { get; set; }
+        public int Attempts { get; set; }
+        public DateTime GameDate { get; set; }
+    }
 }

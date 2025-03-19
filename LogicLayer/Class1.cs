@@ -1,5 +1,6 @@
 ﻿using System;
 using datalay;
+using System.Collections.Generic;
 
 namespace LogicLayer
 {
@@ -36,7 +37,6 @@ namespace LogicLayer
                 result = "Correct!";
                 // Save the game history when the guess is correct
                 dataAccess.SaveGameHistory("Sanwal", guessedNumber, Attempts);
-              
             }
             else if (guessedNumber < TargetNumber)
             {
@@ -49,7 +49,11 @@ namespace LogicLayer
 
             return result;
         }
+
+        // Method to fetch the game history data
+        public List<GameHistory> GetGameHistory()
+        {
+            return dataAccess.GetGameHistory(); // Call the data access layer to fetch the game history
+        }
     }
-
-
 }

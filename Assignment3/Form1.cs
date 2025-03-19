@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
+using datalay;
 using LogicLayer;
 
 namespace Assignment3
@@ -42,6 +44,16 @@ namespace Assignment3
             gameLogic.StartNewGame(); // Use the existing instance of GameLogic
             lblResult.Text = "";
             lblAttempts.Text = "Attempts: 0";
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            // Fetch game history data from GameLogic
+            List<GameHistory> gameHistory = gameLogic.GetGameHistory();
+
+            // Bind the game history data to the DataGridView
+            dataGridView1.DataSource = gameHistory;
+
         }
     }
 
